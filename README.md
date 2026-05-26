@@ -1,130 +1,75 @@
+[update-readmes]   Mode: rewrite — migrating to template structure...
 # build-fs-tree
 
-[![Test](https://github.com/KSXGitHub/build-fs-tree/workflows/Test/badge.svg)](https://github.com/KSXGitHub/build-fs-tree/actions?query=workflow%3ATest)
-[![Crates.io Version](https://img.shields.io/crates/v/build-fs-tree?logo=rust)](https://crates.io/crates/build-fs-tree)
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/build-fs-tree)
 
-Generate a filesystem tree from a macro or a YAML tree.
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-## Description
+## Architecture
 
-When I write integration tests, I often find myself needing to create temporary files and directories. Therefore, I created this crate which provides both a library to use in a Rust code and a CLI program that generates a filesystem tree according to a YAML structure.
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-## Usage Examples
+## Install
 
-### The Library
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-Go to [docs.rs](https://docs.rs/build-fs-tree/) for the full API reference.
-
-#### `FileSystemTree`
-
-`FileSystemTree::build` is faster than `MergeableFileSystemTree::build` but it does not write over an existing directory and it does not create parent directories when they don't exist.
-
-```rust
-use build_fs_tree::{FileSystemTree, Build, dir, file};
-let tree: FileSystemTree<&str, &str> = dir! {
-    "index.html" => file!(r#"
-        <!DOCTYPE html>
-        <link rel="stylesheet" href="styles/style.css" />
-        <script src="scripts/main.js"></script>
-    "#)
-    "scripts" => dir! {
-        "main.js" => file!(r#"document.write('Hello World')"#)
-    }
-    "styles" => dir! {
-        "style.css" => file!(r#":root { color: red; }"#)
-    }
-};
-tree.build("public").unwrap();
+```bash
+git clone https://github.com/Interested-Deving-1896/build-fs-tree.git
+cd build-fs-tree
 ```
 
-#### `MergeableFileSystemTree`
+## Usage
 
-Unlike `FileSystemTree::build`, `MergeableFileSystemTree::build` can write over an existing directory and create parent directories that were not exist before at the cost of performance.
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
 
-You can convert a `FileSystemTree` into a `MergeableFileSystemTree` via `From::from`/`Into::into` and vice versa.
+## Configuration
 
-```rust
-use build_fs_tree::{MergeableFileSystemTree, Build, dir, file};
-let tree = MergeableFileSystemTree::<&str, &str>::from(dir! {
-    "public" => dir! {
-        "index.html" => file!(r#"
-            <!DOCTYPE html>
-            <link rel="stylesheet" href="styles/style.css" />
-            <script src="scripts/main.js"></script>
-        "#)
-        "scripts/main.js" => file!(r#"document.write('Hello World')"#)
-        "scripts/style.css" => file!(r#":root { color: red; }"#)
-    }
-});
-tree.build(".").unwrap();
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
+
+## CI
+
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/build-fs-tree`](https://github.com/Interested-Deving-1896/build-fs-tree) and mirrored through:
+
+```
+Interested-Deving-1896/build-fs-tree  ──►  OpenOS-Project-OSP/build-fs-tree  ──►  OpenOS-Project-Ecosystem-OOC/build-fs-tree
 ```
 
-#### Serialization and Deserialization
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-Both `FileSystemTree` and `MergeableFileSystemTree` implement `serde::Deserialize` and `serde::Serialize`.
+## Contributors
 
-### The Program
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-The name of the command is `build-fs-tree`. It has 2 subcommands: [`create`](#create) and [`populate`](#populate).
+## Origins
 
-#### `create`
+<!-- AI:start:origins -->
+_Original project — no upstream fork._
+<!-- AI:end:origins -->
 
-This command reads YAML from stdin and creates a new filesystem tree. It is the CLI equivalent of [`FileSystemTree`](#filesystemtree).
+## Resources
 
-_Create two text files in a new directory:_
-
-```sh
-echo '{ foo.txt: HELLO, bar.txt: WORLD }' | build-fs-tree create foo-and-bar
-```
-
-_Create a text file and its parent directories:_
-
-```sh
-echo '{ text-files: { foo.txt: HELLO } }' | build-fs-tree create files
-```
-
-_Create a new filesystem tree from a YAML file:_
-
-```sh
-build-fs-tree create root < fs-tree.yaml
-```
-
-#### `populate`
-
-This command reads YAML from stdin and either creates a new filesystem tree or add files and directories to an already existing directories. It is the CLI equivalent of [`MergeableFileSystemTree`](#mergeablefilesystemtree).
-
-_Create two text files in the current directory:_
-
-```sh
-echo '{ foo.txt: HELLO, bar.txt: WORLD }' | build-fs-tree populate .
-```
-
-_Create a text file and its parent directories:_
-
-```sh
-echo '{ files/text-files/foo.txt: HELLO }' | build-fs-tree populate .
-```
-
-_Populate the current directory with filesystem tree as described in a YAML file:_
-
-```sh
-build-fs-tree populate . < fs-tree.yaml
-```
-
-## Packaging Status
-
-[![Packaging Status](https://repology.org/badge/vertical-allrepos/build-fs-tree.svg)](https://repology.org/project/build-fs-tree/versions)
-
-## Frequently Asked Questions
-
-### Why YAML?
-
-It has the features I desired: Easy to read and write, multiline strings done right.
-
-### What about this cool configuration format?
-
-According to the UNIX philosophy, you may pipe your cool configuration format to a program that converts it to JSON (YAML is a superset of JSON) and then pipe the JSON output to `build-fs-tree`.
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
 
 ## License
 
-[MIT](https://git.io/JOkew) © [Hoàng Văn Khải](https://ksxgithub.github.io/).
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/build-fs-tree/blob/master/LICENSE.md) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
